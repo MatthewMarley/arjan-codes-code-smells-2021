@@ -3,9 +3,21 @@ Very advanced Employee management system.
 """
 
 from dataclasses import dataclass
+from enum import Enum, auto
 from typing import List
 
 FIXED_VACATION_DAYS_PAYOUT = 5  # The fixed nr of vacation days that can be paid out.
+
+
+class Role(Enum):
+    """Employee roles within the company"""
+
+    PRESIDENT = auto()
+    VICEPRESIDENT = auto()
+    MANAGER = auto()
+    LEAD = auto()
+    WORKER = auto()
+    INTERN = auto()
 
 
 @dataclass
@@ -13,7 +25,7 @@ class Employee:
     """Basic representation of an employee at the company."""
 
     name: str
-    role: str
+    role: Role
     vacation_days: int = 25
 
     def take_a_holiday(self, payout: bool) -> None:
@@ -69,7 +81,7 @@ class Company:
         """Find all manager employees."""
         managers = []
         for employee in self.employees:
-            if employee.role == "manager":
+            if employee.role == Role.MANAGER:
                 managers.append(employee)
         return managers
 
@@ -77,7 +89,7 @@ class Company:
         """Find all vice-president employees."""
         vice_presidents = []
         for employee in self.employees:
-            if employee.role == "vice_president":
+            if employee.role == Role.VICEPRESIDENT:
                 vice_presidents.append(employee)
         return vice_presidents
 
@@ -85,7 +97,7 @@ class Company:
         """Find all interns."""
         interns = []
         for employee in self.employees:
-            if employee.role == "intern":
+            if employee.role == Role.INTERN:
                 interns.append(employee)
         return interns
 
@@ -107,9 +119,9 @@ def main() -> None:
 
     company = Company()
 
-    company.add_employee(SalariedEmployee(name="Louis", role="manager"))
-    company.add_employee(HourlyEmployee(name="Brenda", role="president"))
-    company.add_employee(HourlyEmployee(name="Tim", role="intern"))
+    company.add_employee(SalariedEmployee(name="Louis", role=Role.MANAGER))
+    company.add_employee(HourlyEmployee(name="Brenda", role=Role.PRESIDENT))
+    company.add_employee(HourlyEmployee(name="Tim", role=Role.INTERN))
 
     print(company.find_vice_presidents())
     print(company.find_managers())
