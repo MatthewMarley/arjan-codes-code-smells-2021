@@ -34,28 +34,27 @@ class Employee(ABC):
         """Method to call when paying an employee"""
         pass
 
-    def take_a_holiday(self, payout: bool) -> None:
-        """Let the employee take a single holiday, or pay out 5 holidays."""
-        if payout:
-            # check that there are enough vacation days left for a payout
-            if self.vacation_days < FIXED_VACATION_DAYS_PAYOUT:
-                raise ValueError(
-                    f"You don't have enough holidays left over for a payout.\
-                        Remaining holidays: {self.vacation_days}."
-                )
-            try:
-                self.vacation_days -= FIXED_VACATION_DAYS_PAYOUT
-                print(f"Paying out a holiday. Holidays left: {self.vacation_days}")
-            except Exception:
-                # this should never happen
-                pass
-        else:
-            if self.vacation_days < 1:
-                raise ValueError(
-                    "You don't have any holidays left. Now back to work, you!"
-                )
-            self.vacation_days -= 1
-            print("Have fun on your holiday. Don't forget to check your emails!")
+    def take_a_holiday(self) -> None:
+        """Let the employee take a single holiday."""
+        if self.vacation_days < 1:
+            raise ValueError("You don't have any holidays left. Now back to work, you!")
+        self.vacation_days -= 1
+        print("Have fun on your holiday. Don't forget to check your emails!")
+
+    def payout_a_holiday(self) -> None:
+        """Payout 5 days of holiday to employee"""
+        # check that there are enough vacation days left for a payout
+        if self.vacation_days < FIXED_VACATION_DAYS_PAYOUT:
+            raise ValueError(
+                f"You don't have enough holidays left over for a payout.\
+                    Remaining holidays: {self.vacation_days}."
+            )
+        try:
+            self.vacation_days -= FIXED_VACATION_DAYS_PAYOUT
+            print(f"Paying out a holiday. Holidays left: {self.vacation_days}")
+        except Exception:
+            # this should never happen
+            pass
 
 
 @dataclass
@@ -68,7 +67,7 @@ class HourlyEmployee(Employee):
     def pay(self) -> None:
         print(
             f"Paying employee {self.name} a hourly rate of \
-                ${self.hourly_rate} for {self.amount} hours."
+                ${self.hourly_rate_dollars} for {self.hours_worked} hours."
         )
 
 
@@ -111,7 +110,7 @@ def main() -> None:
     print(company.find_employees(role=Role.INTERN))
 
     company.employees[0].pay()
-    company.employees[0].take_a_holiday(False)
+    company.employees[0].take_a_holiday()
 
 
 if __name__ == "__main__":
