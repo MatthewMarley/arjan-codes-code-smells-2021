@@ -56,8 +56,8 @@ class Employee:
 class HourlyEmployee(Employee):
     """Employee that's paid based on number of worked hours."""
 
-    hourly_rate: float = 50
-    amount: int = 10
+    hourly_rate_dollars: float = 50
+    hours_worked: int = 10
 
 
 @dataclass
